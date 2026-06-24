@@ -33,6 +33,7 @@ export default function Layout({ children }) {
           <div className="nav-section-label">Main</div>
           {navLink('/', '📊', 'Dashboard', true)}
           {navLink('/cases/new', '➕', 'New Case')}
+          {navLink('/healthscribe', '🎙️', 'HealthScribe')}
 
           <NavLink to="/review" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
             <span className="nav-icon">⚠️</span>

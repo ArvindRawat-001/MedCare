@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { api } from '../api/client.js'
 
 const SAMPLES = {
@@ -84,12 +84,30 @@ DIET: Strict sodium restriction (<1.5g/day). Fluid restriction (1.5L/day). Low p
 
 export default function NewCase() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [step, setStep]     = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError]   = useState(null)
   const [patient, setPatient] = useState({ name:'', age:'', sex:'Male', weight_kg:'', blood_group:'', allergies:'', contact:'', address:'' })
   const [docText, setDocText] = useState('')
   const [patientId, setPatientId] = useState(null)
+
+  useEffect(() => {
+    if (location.state?.prefill) {
+      const p = location.state.prefill
+      setPatient({
+        name: p.name || '',
+        age: p.age ? String(p.age) : '',
+        sex: p.sex || 'Male',
+        weight_kg: p.weight_kg ? String(p.weight_kg) : '',
+        blood_group: p.blood_group || '',
+        allergies: p.allergies || '',
+        contact: '',
+        address: ''
+      })
+      setDocText(p.discharge_text || '')
+    }
+  }, [location.state])
 
   const set = (field) => (e) => setPatient(p => ({ ...p, [field]: e.target.value }))
 
